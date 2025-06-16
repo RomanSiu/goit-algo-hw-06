@@ -18,5 +18,30 @@ for i in G.edges():
     G[i[0]][i[1]]['weight'] = weights[num]
     num += 1
 
-result = nx.single_source_dijkstra_path_length(G, "Лісова")
+
+def dijkstra(graph, start):
+    distances = {vertex: float('infinity') for vertex in graph}
+    distances[start] = 0
+    unvisited = list(graph)
+
+    while unvisited:
+        current_vertex = min(unvisited, key=lambda vertex: distances[vertex])
+
+        if distances[current_vertex] == float('infinity'):
+            break
+
+        for neighbor, data in graph[current_vertex].items():
+            distance = distances[current_vertex] + data['weight']
+
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+
+        unvisited.remove(current_vertex)
+
+    return distances
+
+
+# result = nx.single_source_dijkstra_path_length(G, "Лісова")
+result = dijkstra(G, "Лісова")
+result = dict(sorted(result.items(), key=lambda x: x[1], reverse=False))
 print(result)
